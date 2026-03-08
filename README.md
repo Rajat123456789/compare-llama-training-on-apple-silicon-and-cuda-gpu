@@ -1,4 +1,4 @@
-# LoRA Fine-Tuning of Llama 3.2 1B on C4 (Clean) 
+# LoRA Fine-Tuning of Llama 3.2 1B on C4 (Clean)
 
 A small, self-contained project that fine-tunes **Llama 3.2 1B** with **LoRA** (Low-Rank Adaptation) on a subset of the **C4 clean English** dataset, suitable to run locally and to showcase in an interview.
 
@@ -290,6 +290,7 @@ From actual training run with memory monitoring:
 
 Successfully trained on **RunPod with NVIDIA RTX A4500 (20GB VRAM)** - demonstrating production-ready performance:
 
+
 | Metric                   | Value                             |
 | ------------------------ | --------------------------------- |
 | **Total Training Time**  | **4 minutes 36 seconds (276.2s)** |
@@ -304,23 +305,27 @@ Successfully trained on **RunPod with NVIDIA RTX A4500 (20GB VRAM)** - demonstra
 | **Samples per Second**   | 7.24                              |
 | **4-bit Quantization**   | ✅ Enabled                         |
 
+
 ### GPU Memory Usage (4-bit Quantization)
 
 Real-time tracking with CUDA memory APIs:
 
-| Metric                  | Value                           |
-| ----------------------- | ------------------------------- |
-| **GPU Allocated**       | 1,492 MB (initial)              |
-| **GPU Reserved**        | 2,400 MB (peak)                 |
-| **GPU Peak**            | 2,288 MB                        |
+
+| Metric                      | Value                           |
+| --------------------------- | ------------------------------- |
+| **GPU Allocated**           | 1,492 MB (initial)              |
+| **GPU Reserved**            | 2,400 MB (peak)                 |
+| **GPU Peak**                | 2,288 MB                        |
 | **Avg GPU During Training** | 1,529.9 MB                      |
-| **System RAM (Process)** | 1,953-1,955 MB                  |
-| **Memory Stability**    | Excellent (constant allocation) |
+| **System RAM (Process)**    | 1,953-1,955 MB                  |
+| **Memory Stability**        | Excellent (constant allocation) |
+
 
 ### Training Metrics
 
+
 | Epoch | Loss  | Learning Rate | Token Accuracy | Grad Norm |
-|-------|-------|---------------|----------------|-----------|
+| ----- | ----- | ------------- | -------------- | --------- |
 | 0.08  | 3.117 | 1.917e-05     | 40.33%         | 0.2393    |
 | 0.24  | 2.948 | 1.587e-05     | 42.40%         | 0.1216    |
 | 0.48  | 3.035 | 1.091e-05     | 40.17%         | 0.08984   |
@@ -328,7 +333,9 @@ Real-time tracking with CUDA memory APIs:
 | 0.88  | 2.923 | 2.645e-06     | 42.23%         | 0.2734    |
 | 1.00  | 3.01  | -             | **41.68%**     | -         |
 
+
 **Training Characteristics:**
+
 - Smooth convergence with cosine learning rate decay
 - Stable gradient norms (0.08-0.27 range)
 - Consistent token accuracy improvement
@@ -337,32 +344,37 @@ Real-time tracking with CUDA memory APIs:
 
 ### Performance Comparison: Apple Silicon vs CUDA
 
-| Metric                      | Apple Silicon (M2)     | NVIDIA RTX A4500 (CUDA) | **Speedup**    |
-| --------------------------- | ---------------------- | ----------------------- | -------------- |
-| **Training Time**           | 18 min 55 sec (1,135s) | **4 min 36 sec (276s)** | **4.1x faster** ⚡ |
-| **Seconds per Step**        | 9.09s                  | **2.21s**               | **4.1x faster** |
-| **Samples per Second**      | 1.76                   | **7.24**                | **4.1x faster** |
-| **Peak Memory**             | 731 MB (system RAM)    | 2,288 MB (VRAM)         | -              |
-| **4-bit Quantization**      | ❌ Not available       | ✅ **Enabled**          | 75% VRAM saved |
-| **Memory Tracking**         | Limited (system only)  | **Full GPU stats**      | Production-ready |
-| **Final Loss**              | 2.875                  | 3.01                    | Comparable     |
-| **Token Accuracy**          | 45.76%                 | 41.68%                  | Comparable     |
-| **Hardware Cost**           | $1,500-2,000 (Mac)     | $0.25/hr (cloud)        | Flexible       |
+
+| Metric                 | Apple Silicon (M2)     | NVIDIA RTX A4500 (CUDA) | **Speedup**       |
+| ---------------------- | ---------------------- | ----------------------- | ----------------- |
+| **Training Time**      | 18 min 55 sec (1,135s) | **4 min 36 sec (276s)** | **4.1x faster** ⚡ |
+| **Seconds per Step**   | 9.09s                  | **2.21s**               | **4.1x faster**   |
+| **Samples per Second** | 1.76                   | **7.24**                | **4.1x faster**   |
+| **Peak Memory**        | 731 MB (system RAM)    | 2,288 MB (VRAM)         | -                 |
+| **4-bit Quantization** | ❌ Not available        | ✅ **Enabled**           | 75% VRAM saved    |
+| **Memory Tracking**    | Limited (system only)  | **Full GPU stats**      | Production-ready  |
+| **Final Loss**         | 2.875                  | 3.01                    | Comparable        |
+| **Token Accuracy**     | 45.76%                 | 41.68%                  | Comparable        |
+| **Hardware Cost**      | $1,500-2,000 (Mac)     | $0.25/hr (cloud)        | Flexible          |
+
 
 ### Key Advantages of CUDA Training
 
 **Speed & Efficiency:**
+
 - ⚡ **4.1x faster** than Apple Silicon (same configuration)
 - 🚀 **7.24 samples/sec** vs 1.76 on MPS
 - 💰 **Cost-effective** for cloud training ($0.25/hr × 0.077hr = $0.02 per run)
 
 **Memory & Optimization:**
+
 - ✅ **4-bit quantization** reduces VRAM by ~75% (enabled automatically)
 - 📊 **Full GPU memory profiling** (allocated/reserved/peak)
 - 🎯 **Precise memory tracking** for production optimization
 - 💾 Only **1.5 GB VRAM** used (vs 2.4 GB theoretical max)
 
 **Production Readiness:**
+
 - 🔧 **Stable memory usage** (no spikes or leaks)
 - 📈 **Smooth convergence** (consistent loss reduction)
 - ☁️ **Cloud deployment ready** (RunPod/AWS/GCP/Azure)
@@ -371,6 +383,7 @@ Real-time tracking with CUDA memory APIs:
 ### When to Use Each Platform
 
 **Use NVIDIA CUDA GPU when:**
+
 - Need **fastest training** (4x faster than Apple Silicon)
 - Training **larger models** (4-bit quantization crucial)
 - Require **production-grade monitoring** (full GPU stats)
@@ -378,6 +391,7 @@ Real-time tracking with CUDA memory APIs:
 - Need **cost flexibility** (pay-per-hour vs hardware purchase)
 
 **Use Apple Silicon when:**
+
 - Developing/testing locally on MacBook
 - Need **portability** (laptop vs cloud)
 - Prefer **unified memory** architecture
@@ -409,6 +423,7 @@ python train.py
 ```
 
 **Recommended Cloud GPUs:**
+
 - **RTX A4500** (20GB) - $0.25/hr RunPod - **Tested ✅**
 - **RTX 3090** (24GB) - $0.30/hr - Faster
 - **RTX 4090** (24GB) - $0.40/hr - Fastest
@@ -639,7 +654,9 @@ python train.py
 - **Purpose**: Pretraining and fine-tuning language models and word representations.
 - **Why "clean"**: The full C4 pipeline does heavy filtering and deduplication; the `en` config is the cleaned version so we avoid implementing that preprocessing ourselves.
 
-## Possible Interview Discussion Points
+---
+
+---
 
 1. **Why LoRA?**
   - Reduces trainable parameters by 99.5% (1.24B → 5.6M)
@@ -694,11 +711,13 @@ python train.py
 
 The code automatically detects and optimizes for available hardware:
 
-| Hardware | Status | Auto-Detected | Quantization | Memory Tracking | Notes |
-|----------|--------|---------------|--------------|-----------------|-------|
-| **NVIDIA GPU (CUDA)** | ✅ Fully Supported | Priority 1 | 4-bit (BitsAndBytes) | Full stats | **Fastest, Recommended** |
-| **Apple Silicon (MPS)** | ✅ Fully Supported | Priority 2 | Not available | Limited stats | **Tested (M1/M2/M3)** |
-| **CPU** | ✅ Supported | Priority 3 | Not available | Full stats | Slow, not recommended |
+
+| Hardware                | Status            | Auto-Detected | Quantization         | Memory Tracking | Notes                    |
+| ----------------------- | ----------------- | ------------- | -------------------- | --------------- | ------------------------ |
+| **NVIDIA GPU (CUDA)**   | ✅ Fully Supported | Priority 1    | 4-bit (BitsAndBytes) | Full stats      | **Fastest, Recommended** |
+| **Apple Silicon (MPS)** | ✅ Fully Supported | Priority 2    | Not available        | Limited stats   | **Tested (M1/M2/M3)**    |
+| **CPU**                 | ✅ Supported       | Priority 3    | Not available        | Full stats      | Slow, not recommended    |
+
 
 ### Device Selection Logic
 
@@ -715,6 +734,7 @@ def get_device():
 **Key Features by Device:**
 
 #### **NVIDIA GPU (CUDA) - Recommended for Production**
+
 - ✅ **4-bit quantization** via BitsAndBytes (saves ~75% VRAM)
 - ✅ **Full memory tracking** (allocated, reserved, peak)
 - ✅ **Fastest training** (~10-15 min for 2K samples on RTX 3090)
@@ -722,6 +742,7 @@ def get_device():
 - ✅ **All optimizations available** (LoRA, GaLore, 4-bit)
 
 **Example on CUDA:**
+
 ```bash
 # On a machine with NVIDIA GPU
 python train.py
@@ -731,12 +752,14 @@ python train.py
 ```
 
 **Expected performance by GPU:**
+
 - **RTX 3090/4090 (24GB)**: ~10-12 min, 2.4 GB VRAM (4-bit)
 - **RTX 3080 (10GB)**: ~12-15 min, 2.4 GB VRAM (4-bit)
 - **T4 (16GB)**: ~15-18 min, 2.4 GB VRAM (4-bit)
 - **V100 (16GB)**: ~12-15 min, 2.4 GB VRAM (4-bit)
 
 #### **Apple Silicon (MPS) - Tested & Verified**
+
 - ⚠️ **No 4-bit quantization** (BitsAndBytes not supported on MPS)
 - ⚠️ **Limited memory stats** (MPS doesn't expose detailed GPU memory)
 - ✅ **Manual device placement** (model moved with `.to("mps")`)
@@ -747,6 +770,7 @@ python train.py
 **Training time:** ~19 minutes for 2K samples (actual result)
 
 #### **CPU - Not Recommended**
+
 - ✅ Works but very slow (2-5x slower than GPU)
 - ✅ Full precision (no quantization)
 - Only use for testing/debugging
@@ -756,6 +780,7 @@ python train.py
 The code works on all major cloud platforms:
 
 **Google Colab (Free/Pro):**
+
 ```bash
 # Free tier: T4 GPU (16GB) - works perfectly
 !pip install -r requirements.txt
@@ -764,6 +789,7 @@ The code works on all major cloud platforms:
 ```
 
 **AWS/GCP/Azure:**
+
 ```bash
 # Any CUDA-capable instance (g4dn, p3, etc.)
 python train.py
@@ -771,6 +797,7 @@ python train.py
 ```
 
 **Kaggle, Paperspace, RunPod:**
+
 ```bash
 python train.py
 # Works out of the box on all platforms
@@ -799,20 +826,22 @@ BATCH_SIZE = 2                   # Conservative for unified memory
 ### Troubleshooting
 
 **Check CUDA availability:**
+
 ```bash
 python -c "import torch; print(f'CUDA: {torch.cuda.is_available()}')"
 ```
 
 **Check MPS availability:**
+
 ```bash
 python -c "import torch; print(f'MPS: {torch.backends.mps.is_available()}')"
 ```
 
 **If BitsAndBytes fails on CUDA:**
+
 ```python
 # config.py
 LOAD_IN_4BIT = False  # Disable quantization
 ```
 
 The code is **production-ready for any hardware** with automatic optimization!
-
